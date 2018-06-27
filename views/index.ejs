@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <div class="wrapper">
+      <h3><%= text %></h3>
+      <input type="file" id="file" name="file">
+      <button type="button" id="btn">上传</button>
+    </div>
+  </body>
+  <script src="/javascripts/jquery.min.js"></script>
+  <script>
+    
+    var myfile = document.getElementById('file');
+    myfile.addEventListener("change", function() {
+      var fileList = this.files[0];
+      console.log(this.files);
+      var reader = new FileReader();
+      reader.readAsDataURL(fileList);
+      reader.onload = function() {
+        // console.log('加载完毕');
+        chunkBase64(this.result)
+      };
+    }, false)
+    
+    function sub (arr) {
+      $.ajax({
+        type: 'post',
+        url: 'http://192.168.2.180:3000/imgUpload',
+        data: {base64: arr},
+        cache:false,         //不设置缓存
+        //- processData: false,  // 不处理数据
+        contentType: 'application/x-www-form-urlencoded',   // 不设置内容类型
+        beforeSend: function() {
+          console.log('上传中');
+        },
+        success: function() {
+          console.log('上传完毕');
+        }
+      })
+    }
+    var sliceBase64 = '';
+    function chunkBase64(base64) {
+      sliceBase64 = base64.substring(base64.indexOf(',') + 1);
+    }
+    $("#btn").on('click', function() {
+      sub(sliceBase64);
+    })
+      </script>
+</html>

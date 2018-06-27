@@ -1,0 +1,11 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+.wrapper{
+  box-sizing: border-box;
+  padding: 100px;
+}
+input{
+  margin-top: 40px;
+}
